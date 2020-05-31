@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CompanyCatalogue.Entity\CompanyCatalogue.Entity.csproj" />
+    <ProjectReference Include="..\CompanyCatalogue.Interfaces\CompanyCatalogue.Interfaces.csproj" />
+    <ProjectReference Include="..\CompanyCatalogue.Models\CompanyCatalogue.Models.csproj" />
+  </ItemGroup>
+
+</Project>

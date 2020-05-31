@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CompanyCatalogue.Interfaces\CompanyCatalogue.Interfaces.csproj" />
+    <ProjectReference Include="..\CompanyCatalogue.Models\CompanyCatalogue.Models.csproj" />
+    <ProjectReference Include="..\CompanyCatalogue.Repository\CompanyCatalogue.Repository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
+</Project>
