@@ -19,7 +19,7 @@ namespace CompanyCatalogue.Repository
             CompanyDetail companyDetail = new CompanyDetail { CompanyId = companyId };
             _catalogueContext.CompanyDetails.Attach(companyDetail);
             _catalogueContext.CompanyDetails.Remove(companyDetail);
-            _catalogueContext.SaveChangesAsync();
+            await _catalogueContext.SaveChangesAsync();
         }
     }
 }

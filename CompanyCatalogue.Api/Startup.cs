@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace CompanyCatalogue.Api
 {
@@ -30,6 +31,15 @@ namespace CompanyCatalogue.Api
             services.AddDbContext<CatalogueContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("CatalogueDbContext"), opt => opt.MaxBatchSize(150)));
             services.AddBusinessService();
             services.AddRepositoryService();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "CompanyCatalogue",
+                    Description = "Development"  
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +62,12 @@ namespace CompanyCatalogue.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CompanyCatalogue");
             });
         }
     }
