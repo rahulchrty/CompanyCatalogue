@@ -2,7 +2,7 @@
 {
     public class CompanyDetailModel
     {
-        public int SlNo { get; set; } 
+        public int CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string Sector { get; set; }
         public string SubSector { get; set; }

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CompanyCatalogue.Entity.Migrations
 {
     [DbContext(typeof(CatalogueContext))]
-    [Migration("20200531153930_intial")]
-    partial class intial
+    [Migration("20200531202702_Init-migration")]
+    partial class Initmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,7 +44,8 @@ namespace CompanyCatalogue.Entity.Migrations
                     b.Property<string>("CatalogueId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Company")
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfEmployees")
@@ -55,9 +56,6 @@ namespace CompanyCatalogue.Entity.Migrations
 
                     b.Property<string>("Sector")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SlNo")
-                        .HasColumnType("int");
 
                     b.Property<string>("SubSector")
                         .HasColumnType("nvarchar(max)");

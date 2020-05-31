@@ -26,7 +26,7 @@ namespace CompanyCatalogue.Repository
                                                            where company.CatalogueId == catalogueId
                                                            select new CompanyDetailModel
                                                            {
-                                                               SlNo = company.SlNo,
+                                                               CompanyId = company.CompanyId,
                                                                CompanyName = company.CompanyName,
                                                                Region = company.Region,
                                                                Sector = company.Sector,

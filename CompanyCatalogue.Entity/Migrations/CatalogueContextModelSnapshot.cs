@@ -43,6 +43,7 @@ namespace CompanyCatalogue.Entity.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CompanyName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfEmployees")
@@ -53,9 +54,6 @@ namespace CompanyCatalogue.Entity.Migrations
 
                     b.Property<string>("Sector")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SlNo")
-                        .HasColumnType("int");
 
                     b.Property<string>("SubSector")
                         .HasColumnType("nvarchar(max)");

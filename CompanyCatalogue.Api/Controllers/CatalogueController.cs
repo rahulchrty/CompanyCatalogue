@@ -3,6 +3,7 @@ using CompanyCatalogue.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -14,12 +15,25 @@ namespace CompanyCatalogue.Api.Controllers
     {
         private IProcessCatalogueFile _processCatalogueFile;
         private ICatalogueDetails _catalogueDetails;
+        private IDeleteCompany _deleteCompany;
+        private IDeleteCatalogue _deleteCatalogue;
+        private IRetrieveCatalogue _retrieveCatalogue;
+        private IUpdateCompanyDetails _updateCompanyDetails;
         public CatalogueController(IProcessCatalogueFile processCatalogueFile,
-                                    ICatalogueDetails catalogueDetails)
+                                    ICatalogueDetails catalogueDetails,
+                                    IDeleteCompany deleteCompany,
+                                    IDeleteCatalogue deleteCatalogue,
+                                    IRetrieveCatalogue retrieveCatalogue,
+                                    IUpdateCompanyDetails updateCompanyDetails)
         {
             _processCatalogueFile = processCatalogueFile;
             _catalogueDetails = catalogueDetails;
+            _deleteCompany = deleteCompany;
+            _deleteCatalogue = deleteCatalogue;
+            _retrieveCatalogue = retrieveCatalogue;
+            _updateCompanyDetails = updateCompanyDetails;
         }
+
         [HttpPost]
         public async Task<IActionResult> PostAsync(IFormFile catalogueFile)
         {
@@ -34,13 +48,89 @@ namespace CompanyCatalogue.Api.Controllers
             }
         }
 
-        [HttpGet("{catalogueId}")]
-        public async Task<IActionResult> Get([FromRoute] string catalogueId)
+        [HttpGet]
+        public async Task<IActionResult> GetAllCatalogue()
         {
-            CatalogueByGuidModel catalogueDetails = await _catalogueDetails.GetCatalogueByCatalogueId(catalogueId);
-            return Ok(catalogueDetails);
+            try
+            {
+                List<CatalogueModel> catalogues = await _retrieveCatalogue.GetAllCatalogue();
+                if (catalogues != null)
+                {
+                    return Ok(catalogues);
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
+        [HttpGet("{catalogueId}")]
+        public async Task<IActionResult> GetCompanyDetails([FromRoute] string catalogueId)
+        {
+            try
+            {
+                CatalogueByGuidModel catalogueDetails = await _catalogueDetails.GetCatalogueByCatalogueId(catalogueId);
+                if (catalogueDetails != null)
+                {
+                    return Ok(catalogueDetails);
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpDelete("{catalogueId}")]
+        public async Task<IActionResult> DeleteCatalogue([FromRoute] string catalogueId)
+        {
+            try
+            {
+                await _deleteCatalogue.Delete(catalogueId);
+                return StatusCode(204);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpDelete("company")]
+        public IActionResult DeleteCompanyById([FromQuery] int companyId)
+        {
+            try
+            {
+                _deleteCompany.Delete(companyId);
+                return StatusCode(204);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPut("{catalogueId}")]
+        public async Task<IActionResult> Update([FromBody] List<CompanyDetailModel> companyDetails)
+        {
+            try
+            {
+                await _updateCompanyDetails.Update(companyDetails);
+                return StatusCode(202);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
 
         [HttpGet("Export")]
         public async Task<FileStreamResult> Export([FromQuery] string fileGuid)

@@ -28,7 +28,6 @@ namespace CompanyCatalogue.Repository
                     {
                         _catalogueContext.CompanyDetails.Add(new CompanyDetail { 
                             CatalogueId = guid,
-                            SlNo = eachCompany.SlNo,
                             CompanyName = eachCompany.CompanyName,
                             Region = eachCompany.Region,
                             Sector = eachCompany.Sector,

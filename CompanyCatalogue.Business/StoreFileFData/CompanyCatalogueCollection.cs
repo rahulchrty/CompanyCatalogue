@@ -14,7 +14,6 @@ namespace CompanyCatalogue.Business
             {
                 catalogueDetails.Add(new CompanyDetailModel
                 {
-                    SlNo = int.Parse(eachRow["S.No."].ToString()),
                     CompanyName = eachRow["Company"].ToString(),
                     Sector = eachRow["Sector"].ToString(),
                     SubSector = eachRow["Sub-Sector"].ToString(),

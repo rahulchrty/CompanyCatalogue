@@ -12,6 +12,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ICompanyCatalogueCollection, CompanyCatalogueCollection>();
             services.AddScoped<ISpreadsheetCellValue, SpreadsheetCellValue>();
             services.AddScoped<ICatalogueDetails, CatalogueDetails>();
+            services.AddScoped<IDeleteCompany, DeleteCompany>();
+            services.AddScoped<IDeleteCatalogue, DeleteCatalogue>();
+            services.AddScoped<IUpdateCompanyDetails, UpdateCompanyDetails>();
+            services.AddScoped<IRetrieveCatalogue, RetrieveCatalogue>();
             return services;
         }
     }

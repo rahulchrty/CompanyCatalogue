@@ -10,6 +10,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ISaveFile, LocalStorage>();
             services.AddScoped<ICatalogueUOW, CatalogueUOF>();
             services.AddScoped<IRetrieveCatalogueDetailsRepository, RetrieveCatalogueDetailsRepository>();
+            services.AddScoped<IDeleteCompanyRepository, DeleteCompanyRepository>();
+            services.AddScoped<IDeleteCataloguesRepository, DeleteCataloguesRepository>();
+            services.AddScoped<IRetrieveCatalogueRepository, RetrieveCatalogueRepository>();
+            services.AddScoped<IUpdateCompanyDetailsRepository, UpdateCompanyDetailsRepository>();
             return services;
         }
     }

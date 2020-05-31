@@ -2,7 +2,7 @@
 
 namespace CompanyCatalogue.Entity.Migrations
 {
-    public partial class intial : Migration
+    public partial class Initmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,8 +30,7 @@ namespace CompanyCatalogue.Entity.Migrations
                     CompanyId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CatalogueId = table.Column<string>(nullable: true),
-                    SlNo = table.Column<int>(nullable: false),
-                    Company = table.Column<string>(nullable: true),
+                    CompanyName = table.Column<string>(nullable: false),
                     Sector = table.Column<string>(nullable: true),
                     SubSector = table.Column<string>(nullable: true),
                     Region = table.Column<string>(nullable: true),

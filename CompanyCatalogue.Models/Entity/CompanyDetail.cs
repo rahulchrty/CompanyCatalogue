@@ -7,7 +7,7 @@ namespace CompanyCatalogue.Models
         [Key]
         public int CompanyId { get; set; }
         public string CatalogueId { get; set; }
-        public int SlNo { get; set; }
+        [Required]
         public string CompanyName { get; set; }
         public string Sector { get; set; }
         public string SubSector { get; set; }
