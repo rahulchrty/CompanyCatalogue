@@ -4,6 +4,7 @@ using CompanyCatalogue.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CompanyCatalogue.Repository
 {
@@ -14,7 +15,7 @@ namespace CompanyCatalogue.Repository
         {
             _catalogueContext = catalogueContext;
         }
-        public async void Delete(int companyId)
+        public async Task Delete(int companyId)
         {
             CompanyDetail companyDetail = new CompanyDetail { CompanyId = companyId };
             _catalogueContext.CompanyDetails.Attach(companyDetail);

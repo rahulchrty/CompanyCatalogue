@@ -105,11 +105,11 @@ namespace CompanyCatalogue.Api.Controllers
         }
 
         [HttpDelete("company")]
-        public IActionResult DeleteCompanyById([FromQuery] int companyId)
+        public async Task<IActionResult> DeleteCompanyById([FromQuery] int companyId)
         {
             try
             {
-                _deleteCompany.Delete(companyId);
+                await _deleteCompany.Delete(companyId);
                 return StatusCode(204);
             }
             catch (Exception e)

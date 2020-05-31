@@ -1,17 +1,18 @@
 ﻿using CompanyCatalogue.Interfaces;
+using System.Threading.Tasks;
 
 namespace CompanyCatalogue.Business
 {
     public class DeleteCompany : IDeleteCompany
     {
-        private IDeleteCompanyRepository _deleteCompanyRepository;
+        private readonly IDeleteCompanyRepository _deleteCompanyRepository;
         public DeleteCompany(IDeleteCompanyRepository deleteCompanyRepository)
         {
             _deleteCompanyRepository = deleteCompanyRepository;
         }
-        public void Delete(int companyId)
+        public async Task Delete(int companyId)
         {
-            _deleteCompanyRepository.Delete(companyId);
+            await _deleteCompanyRepository.Delete(companyId);
         }
     }
 }

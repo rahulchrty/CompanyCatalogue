@@ -1,7 +1,9 @@
-﻿namespace CompanyCatalogue.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace CompanyCatalogue.Interfaces
 {
     public interface IDeleteCompanyRepository
     {
-        void Delete(int companyId);
+        Task Delete(int companyId);
     }
 }
