@@ -14,15 +14,18 @@ namespace CompanyCatalogue.Business
         private IFileParser _fileParser;
         private ICompanyCatalogueCollection _companyCatalogueCollection;
         private ICatalogueUOW _catalogueUOW;
+        private IDeleteFile _deleteFile;
         public ProcessCatalogueFile(ISaveFile saveFile,
                                     IFileParser fileParser,
                                     ICompanyCatalogueCollection companyCatalogueCollection,
-                                    ICatalogueUOW catalogueUOW)
+                                    ICatalogueUOW catalogueUOW,
+                                    IDeleteFile deleteFile)
         {
             _saveFile = saveFile;
             _fileParser = fileParser;
             _companyCatalogueCollection = companyCatalogueCollection;
             _catalogueUOW = catalogueUOW;
+            _deleteFile = deleteFile;
         }
         public async Task<string> Process(IFormFile catalogueFile)
         {
@@ -34,6 +37,7 @@ namespace CompanyCatalogue.Business
                 //validation goes here
                 List<CompanyDetailModel> catalogueDetails = _companyCatalogueCollection.GetCollection(dtCompanyCatalogue);
                 _catalogueUOW.Create(catalogueDetails, fileUniqueGuid, catalogueFile.FileName);
+                _deleteFile.Delete(savedPath);
             }
             return fileUniqueGuid;
         }

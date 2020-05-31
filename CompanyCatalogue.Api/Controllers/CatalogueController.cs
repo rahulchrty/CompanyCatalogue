@@ -133,13 +133,13 @@ namespace CompanyCatalogue.Api.Controllers
         }
 
         [HttpGet("Export")]
-        public async Task<FileStreamResult> Export([FromQuery] string fileGuid)
+        public async Task<FileStreamResult> Export([FromQuery] string catalogueId)
         {
-            string filePath = "d:/" + fileGuid + ".xlsx";
+            string filePath = "d:/" + catalogueId + ".xlsx";
             var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             return new FileStreamResult(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             {
-                FileDownloadName = fileGuid + ".xlsx"
+                FileDownloadName = catalogueId + ".xlsx"
             };
         }
     }
