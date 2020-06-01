@@ -5,6 +5,6 @@ namespace CompanyCatalogue.Interfaces
 {
     public interface IUpdateCompanyDetailsRepository
     {
-        Task Update(CompanyDetailModel companyDetails);
+        Task Update(string catalogueId, int companyId, UpdateCompanyDetailModel updatedCompanyDetail);
     }
 }

@@ -13,10 +13,10 @@ namespace CompanyCatalogue.Repository
         {
             _catalogueContext = catalogueContext;
         }
-        public Task Update(CompanyDetailModel updatedCompanyDetail)
+        public Task Update(string catalogueId, int companyId, UpdateCompanyDetailModel updatedCompanyDetail)
         {
             CompanyDetail companyDetail =  _catalogueContext.CompanyDetails
-                                .FirstOrDefault(x=>x.CompanyId == updatedCompanyDetail.CompanyId);
+                                .FirstOrDefault(x=>x.CatalogueId == catalogueId && x.CompanyId == companyId);
             companyDetail.CompanyName = updatedCompanyDetail.CompanyName;
             companyDetail.Region = updatedCompanyDetail.Region;
             companyDetail.Sector = updatedCompanyDetail.Sector;

@@ -1,6 +1,5 @@
 ﻿using CompanyCatalogue.Interfaces;
 using CompanyCatalogue.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CompanyCatalogue.Business
@@ -12,12 +11,9 @@ namespace CompanyCatalogue.Business
         {
             _updateCompanyDetailsRepository = updateCompanyDetailsRepository;
         }
-        public async Task Update(List<CompanyDetailModel> companyDetails)
+        public async Task Update(string catalogueId, int companyId, UpdateCompanyDetailModel updatedCompanyDetail)
         {
-            foreach (CompanyDetailModel eachCompany in companyDetails)
-            {
-                await _updateCompanyDetailsRepository.Update(eachCompany);
-            }
+            await _updateCompanyDetailsRepository.Update(catalogueId, companyId, updatedCompanyDetail);
         }
     }
 }

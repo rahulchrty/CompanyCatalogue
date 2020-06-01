@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace CompanyCatalogue.Api.Controllers
@@ -19,12 +18,14 @@ namespace CompanyCatalogue.Api.Controllers
         private IDeleteCatalogue _deleteCatalogue;
         private IRetrieveCatalogue _retrieveCatalogue;
         private IUpdateCompanyDetails _updateCompanyDetails;
+        private IProcessExport _processExport;
         public CatalogueController(IProcessCatalogueFile processCatalogueFile,
                                     ICatalogueDetails catalogueDetails,
                                     IDeleteCompany deleteCompany,
                                     IDeleteCatalogue deleteCatalogue,
                                     IRetrieveCatalogue retrieveCatalogue,
-                                    IUpdateCompanyDetails updateCompanyDetails)
+                                    IUpdateCompanyDetails updateCompanyDetails,
+                                    IProcessExport processExport)
         {
             _processCatalogueFile = processCatalogueFile;
             _catalogueDetails = catalogueDetails;
@@ -32,6 +33,7 @@ namespace CompanyCatalogue.Api.Controllers
             _deleteCatalogue = deleteCatalogue;
             _retrieveCatalogue = retrieveCatalogue;
             _updateCompanyDetails = updateCompanyDetails;
+            _processExport = processExport;
         }
 
         [HttpPost]
@@ -118,12 +120,12 @@ namespace CompanyCatalogue.Api.Controllers
             }
         }
 
-        [HttpPut("{catalogueId}")]
-        public async Task<IActionResult> Update([FromBody] List<CompanyDetailModel> companyDetails)
+        [HttpPut("{catalogueId}/{companyId}")]
+        public async Task<IActionResult> Update([FromRoute] string catalogueId, [FromRoute] int companyId, [FromBody] UpdateCompanyDetailModel companyDetails)
         {
             try
             {
-                await _updateCompanyDetails.Update(companyDetails);
+                await _updateCompanyDetails.Update(catalogueId, companyId, companyDetails);
                 return StatusCode(202);
             }
             catch (Exception e)
@@ -133,14 +135,17 @@ namespace CompanyCatalogue.Api.Controllers
         }
 
         [HttpGet("Export")]
-        public async Task<FileStreamResult> Export([FromQuery] string catalogueId)
+        public async Task<IActionResult> Export([FromQuery] string catalogueId)
         {
-            string filePath = "d:/" + catalogueId + ".xlsx";
-            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            return new FileStreamResult(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            byte[] file = await _processExport.Export(catalogueId);
+            System.Net.Mime.ContentDisposition cd = new System.Net.Mime.ContentDisposition
             {
-                FileDownloadName = catalogueId + ".xlsx"
+                FileName = "aa.xlsx",
+                Inline = false  // false = prompt the user for downloading;  true = browser to try to show the file inline
             };
+            Response.Headers.Add("Content-Disposition", cd.ToString());
+            Response.Headers.Add("X-Content-Type-Options", "nosniff");
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
     }
 }

@@ -16,6 +16,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IDeleteCatalogue, DeleteCatalogue>();
             services.AddScoped<IUpdateCompanyDetails, UpdateCompanyDetails>();
             services.AddScoped<IRetrieveCatalogue, RetrieveCatalogue>();
+            services.AddScoped<IProcessExport, ProcessExport>();
+            services.AddScoped<IConstructExcelFile, ConstructExcelFile>();
             return services;
         }
     }
