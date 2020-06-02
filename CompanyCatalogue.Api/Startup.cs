@@ -31,6 +31,11 @@ namespace CompanyCatalogue.Api
             services.AddDbContext<CatalogueContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("CatalogueDbContext"), opt => opt.MaxBatchSize(150)));
             services.AddBusinessService();
             services.AddRepositoryService();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("company-cat-ui",
+                builder => builder.WithOrigins("http://localhost:3000"));
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -57,6 +62,7 @@ namespace CompanyCatalogue.Api
 
             app.UseRouting();
 
+            app.UseCors("company-cat-ui");
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -64,7 +70,6 @@ namespace CompanyCatalogue.Api
                 endpoints.MapControllers();
             });
             app.UseSwagger();
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CompanyCatalogue");

@@ -1,5 +1,6 @@
 ﻿using CompanyCatalogue.Interfaces;
 using CompanyCatalogue.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace CompanyCatalogue.Api.Controllers
 {
+    [EnableCors("company-cat-ui")]
     [Route("api/catalogue")]
     [ApiController]
     public class CatalogueController : ControllerBase
