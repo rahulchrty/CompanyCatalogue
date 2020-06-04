@@ -135,7 +135,8 @@ namespace CompanyCatalogue.Api.Controllers
         }
 
         [HttpPut("{catalogueId}/{companyId}")]
-        public async Task<IActionResult> Update([FromRoute] string catalogueId, [FromRoute] int companyId, [FromBody] UpdateCompanyDetailModel companyDetails)
+        public async Task<IActionResult> Update([FromRoute] string catalogueId, [FromRoute] int companyId, 
+                                                [FromBody] UpdateCompanyDetailModel companyDetails)
         {
             try
             {
