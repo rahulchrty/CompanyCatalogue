@@ -4,6 +4,6 @@ namespace CompanyCatalogue.Interfaces
 {
     public interface IDeleteCatalogue
     {
-        Task Delete(string catalogueId);
+        Task<bool> Delete(string catalogueId);
     }
 }

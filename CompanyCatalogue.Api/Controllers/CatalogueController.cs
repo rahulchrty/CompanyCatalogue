@@ -94,13 +94,21 @@ namespace CompanyCatalogue.Api.Controllers
             }
         }
 
+        [EnableCors("company-cat-ui")]
         [HttpDelete("{catalogueId}")]
         public async Task<IActionResult> DeleteCatalogue([FromRoute] string catalogueId)
         {
             try
             {
-                await _deleteCatalogue.Delete(catalogueId);
-                return StatusCode(204);
+                bool isAccepted = await _deleteCatalogue.Delete(catalogueId);
+                if (isAccepted)
+                {
+                    return StatusCode(202);
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
             }
             catch (Exception e)
             {
@@ -114,7 +122,7 @@ namespace CompanyCatalogue.Api.Controllers
             try
             {
                 await _deleteCompany.Delete(companyId);
-                return StatusCode(204);
+                return StatusCode(202);
             }
             catch (Exception e)
             {
@@ -127,8 +135,15 @@ namespace CompanyCatalogue.Api.Controllers
         {
             try
             {
-                await _updateCompanyDetails.Update(catalogueId, companyId, companyDetails);
-                return StatusCode(202);
+                bool isSuccess = await _updateCompanyDetails.Update(catalogueId, companyId, companyDetails);
+                if (isSuccess)
+                {
+                    return StatusCode(202);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
             }
             catch (Exception e)
             {

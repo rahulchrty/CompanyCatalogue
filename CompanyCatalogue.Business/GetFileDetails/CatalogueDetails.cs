@@ -13,7 +13,12 @@ namespace CompanyCatalogue.Business
         }
         public async Task<CatalogueByGuidModel> GetCatalogueByCatalogueId(string catalogueId)
         {
-            return await _retrieveCatalogueDetailsRepo.GetCatalogueByGuid(catalogueId);
+            CatalogueByGuidModel catalogueByGuidModel = null;
+            if (!string.IsNullOrWhiteSpace(catalogueId))
+            {
+                catalogueByGuidModel = await _retrieveCatalogueDetailsRepo.GetCatalogueByGuid(catalogueId);
+            }
+            return catalogueByGuidModel;
         }
     }
 }

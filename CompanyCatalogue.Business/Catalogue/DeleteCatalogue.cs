@@ -10,9 +10,15 @@ namespace CompanyCatalogue.Business
         {
             _deleteCataloguesRepository = deleteCataloguesRepository;
         }
-        public async Task Delete(string catalogueId)
+        public async Task<bool> Delete(string catalogueId)
         {
-            await _deleteCataloguesRepository.Delete(catalogueId);
+            bool isAccepted = false;
+            if (!string.IsNullOrWhiteSpace(catalogueId))
+            {
+                await _deleteCataloguesRepository.Delete(catalogueId);
+                isAccepted = true;
+            }
+            return isAccepted;
         }
     }
 }

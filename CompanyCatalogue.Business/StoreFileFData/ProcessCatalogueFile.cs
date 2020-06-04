@@ -34,7 +34,6 @@ namespace CompanyCatalogue.Business
             {
                 string savedPath = await _saveFile.Save(catalogueFile, fileUniqueGuid);
                 DataTable dtCompanyCatalogue = _fileParser.Parse(savedPath);
-                //validation goes here
                 List<CompanyDetailModel> catalogueDetails = _companyCatalogueCollection.GetCollection(dtCompanyCatalogue);
                 _catalogueUOW.Create(catalogueDetails, fileUniqueGuid, catalogueFile.FileName);
                 _deleteFile.Delete(savedPath);

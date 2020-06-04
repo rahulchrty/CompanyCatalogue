@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CompanyCatalogue.Entity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 namespace CompanyCatalogue.Api
@@ -31,11 +25,21 @@ namespace CompanyCatalogue.Api
             services.AddDbContext<CatalogueContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("CatalogueDbContext"), opt => opt.MaxBatchSize(150)));
             services.AddBusinessService();
             services.AddRepositoryService();
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("company-cat-ui",
+            //    builder => builder.WithOrigins("http://localhost:3000"));
+            //});
+
             services.AddCors(options =>
             {
                 options.AddPolicy("company-cat-ui",
-                builder => builder.WithOrigins("http://localhost:3000"));
+                    builder => builder.WithOrigins("http://localhost:3000")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
             });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
