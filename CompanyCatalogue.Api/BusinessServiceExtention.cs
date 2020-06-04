@@ -8,6 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddBusinessService(this IServiceCollection services)
         {
             services.AddScoped<IProcessCatalogueFile, ProcessCatalogueFile>();
+            services.AddScoped<IConstructFileStoragePath, ConstructFileStoragePath>();
             services.AddScoped<IFileParser, FileParser>();
             services.AddScoped<ICompanyCatalogueCollection, CompanyCatalogueCollection>();
             services.AddScoped<ISpreadsheetCellValue, SpreadsheetCellValue>();

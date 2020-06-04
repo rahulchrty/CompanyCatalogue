@@ -5,6 +5,6 @@ namespace CompanyCatalogue.Interfaces
 {
     public interface ISaveFile
     {
-        Task<string> Save(IFormFile file, string fileUniqueName);
+        Task Save(IFormFile file, string filePath);
     }
 }

@@ -8,13 +8,16 @@ namespace CompanyCatalogue.Business
 {
     public class ProcessExport : IProcessExport
     {
+        private readonly IConstructFileStoragePath _constructFileStoragePath;
         private readonly IRetrieveCatalogueDetailsRepository _retrieveCatalogueDetailsRepo;
         private IConstructExcelFile _constructExcelFile;
         private IDeleteFile _deleteFile;
-        public ProcessExport(IRetrieveCatalogueDetailsRepository retrieveCatalogueDetailsRepo,
+        public ProcessExport(IConstructFileStoragePath constructFileStoragePath,
+                            IRetrieveCatalogueDetailsRepository retrieveCatalogueDetailsRepo,
                             IConstructExcelFile constructExcelFile,
                             IDeleteFile deleteFile)
         {
+            _constructFileStoragePath = constructFileStoragePath;
             _retrieveCatalogueDetailsRepo = retrieveCatalogueDetailsRepo;
             _constructExcelFile = constructExcelFile;
             _deleteFile = deleteFile;
@@ -24,10 +27,9 @@ namespace CompanyCatalogue.Business
             try
             {
                 CatalogueByGuidModel catalogueDetails = await _retrieveCatalogueDetailsRepo.GetCatalogueByGuid(catalogueId);
-                string path = "d:/" + catalogueDetails.CatalogueId + ".xlsx";
+                string path = _constructFileStoragePath.GetPath(catalogueId);
                 _constructExcelFile.Create(path, catalogueDetails.CompanyDetails);
                 byte[] file = File.ReadAllBytes(path);
-                //FileStream fileStream = new FileStream(path, FileMode.Open);
                 _deleteFile.Delete(path);
                 return file;
             }

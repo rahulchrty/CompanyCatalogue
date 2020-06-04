@@ -10,17 +10,21 @@ namespace CompanyCatalogue.Business
 {
     public class ProcessCatalogueFile : IProcessCatalogueFile
     {
+        private readonly IConstructFileStoragePath _constructFileStoragePath;
         private readonly ISaveFile _saveFile;
         private IFileParser _fileParser;
         private ICompanyCatalogueCollection _companyCatalogueCollection;
         private ICatalogueUOW _catalogueUOW;
         private IDeleteFile _deleteFile;
-        public ProcessCatalogueFile(ISaveFile saveFile,
+        public ProcessCatalogueFile(
+                                    IConstructFileStoragePath constructFileStoragePath,
+                                    ISaveFile saveFile,
                                     IFileParser fileParser,
                                     ICompanyCatalogueCollection companyCatalogueCollection,
                                     ICatalogueUOW catalogueUOW,
                                     IDeleteFile deleteFile)
         {
+            _constructFileStoragePath = constructFileStoragePath;
             _saveFile = saveFile;
             _fileParser = fileParser;
             _companyCatalogueCollection = companyCatalogueCollection;
@@ -29,16 +33,24 @@ namespace CompanyCatalogue.Business
         }
         public async Task<string> Process(IFormFile catalogueFile)
         {
-            string fileUniqueGuid = Guid.NewGuid().ToString();  
-            if (catalogueFile != null)
+            try
             {
-                string savedPath = await _saveFile.Save(catalogueFile, fileUniqueGuid);
-                DataTable dtCompanyCatalogue = _fileParser.Parse(savedPath);
-                List<CompanyDetailModel> catalogueDetails = _companyCatalogueCollection.GetCollection(dtCompanyCatalogue);
-                _catalogueUOW.Create(catalogueDetails, fileUniqueGuid, catalogueFile.FileName);
-                _deleteFile.Delete(savedPath);
+                string fileUniqueGuid = Guid.NewGuid().ToString();
+                if (catalogueFile != null)
+                {
+                    string savedPath = _constructFileStoragePath.GetPath(fileUniqueGuid);
+                    await _saveFile.Save(catalogueFile, savedPath);
+                    DataTable dtCompanyCatalogue = _fileParser.Parse(savedPath);
+                    List<CompanyDetailModel> catalogueDetails = _companyCatalogueCollection.GetCollection(dtCompanyCatalogue);
+                    _catalogueUOW.Create(catalogueDetails, fileUniqueGuid, catalogueFile.FileName);
+                    _deleteFile.Delete(savedPath);
+                }
+                return fileUniqueGuid;
             }
-            return fileUniqueGuid;
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Net.Mime;
 
 namespace CompanyCatalogue.Api.Controllers
 {
@@ -21,13 +23,15 @@ namespace CompanyCatalogue.Api.Controllers
         private IRetrieveCatalogue _retrieveCatalogue;
         private IUpdateCompanyDetails _updateCompanyDetails;
         private IProcessExport _processExport;
+        private IConfiguration _configuration;
         public CatalogueController(IProcessCatalogueFile processCatalogueFile,
                                     ICatalogueDetails catalogueDetails,
                                     IDeleteCompany deleteCompany,
                                     IDeleteCatalogue deleteCatalogue,
                                     IRetrieveCatalogue retrieveCatalogue,
                                     IUpdateCompanyDetails updateCompanyDetails,
-                                    IProcessExport processExport)
+                                    IProcessExport processExport,
+                                    IConfiguration configuration)
         {
             _processCatalogueFile = processCatalogueFile;
             _catalogueDetails = catalogueDetails;
@@ -36,6 +40,7 @@ namespace CompanyCatalogue.Api.Controllers
             _retrieveCatalogue = retrieveCatalogue;
             _updateCompanyDetails = updateCompanyDetails;
             _processExport = processExport;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -94,7 +99,6 @@ namespace CompanyCatalogue.Api.Controllers
             }
         }
 
-        [EnableCors("company-cat-ui")]
         [HttpDelete("{catalogueId}")]
         public async Task<IActionResult> DeleteCatalogue([FromRoute] string catalogueId)
         {
@@ -154,15 +158,22 @@ namespace CompanyCatalogue.Api.Controllers
         [HttpGet("Export")]
         public async Task<IActionResult> Export([FromQuery] string catalogueId)
         {
-            byte[] file = await _processExport.Export(catalogueId);
-            System.Net.Mime.ContentDisposition cd = new System.Net.Mime.ContentDisposition
+            try
             {
-                FileName = "aa.xlsx",
-                Inline = false  // false = prompt the user for downloading;  true = browser to try to show the file inline
-            };
-            Response.Headers.Add("Content-Disposition", cd.ToString());
-            Response.Headers.Add("X-Content-Type-Options", "nosniff");
-            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                byte[] file = await _processExport.Export(catalogueId);
+                ContentDisposition contentDisposition = new ContentDisposition
+                {
+                    FileName = catalogueId + _configuration.GetSection("FileStorage").GetSection("Extention").Value,
+                    Inline = false
+                };
+                Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+                Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                return File(file, _configuration.GetSection("MimeType").GetSection("Appli_Excel").Value);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }
