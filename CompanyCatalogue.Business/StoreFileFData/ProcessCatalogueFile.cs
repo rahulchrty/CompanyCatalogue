@@ -42,7 +42,7 @@ namespace CompanyCatalogue.Business
                     await _saveFile.Save(catalogueFile, savedPath);
                     DataTable dtCompanyCatalogue = _fileParser.Parse(savedPath);
                     List<CompanyDetailModel> catalogueDetails = _companyCatalogueCollection.GetCollection(dtCompanyCatalogue);
-                    _catalogueUOW.Create(catalogueDetails, fileUniqueGuid, catalogueFile.FileName);
+                    await _catalogueUOW.Create(catalogueDetails, fileUniqueGuid, catalogueFile.FileName);
                     _deleteFile.Delete(savedPath);
                 }
                 return fileUniqueGuid;

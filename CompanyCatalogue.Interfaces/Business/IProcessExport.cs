@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using CompanyCatalogue.Models;
+using System.Threading.Tasks;
 
 namespace CompanyCatalogue.Interfaces
 {
     public interface IProcessExport
     {
-        Task<byte[]> Export(string catalogueId);
+        Task<ExportModel> Export(string catalogueId);
     }
 }

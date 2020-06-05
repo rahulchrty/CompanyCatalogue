@@ -161,15 +161,15 @@ namespace CompanyCatalogue.Api.Controllers
         {
             try
             {
-                byte[] file = await _processExport.Export(catalogueId);
+                ExportModel fileDetails = await _processExport.Export(catalogueId);
                 ContentDisposition contentDisposition = new ContentDisposition
                 {
-                    FileName = catalogueId + _configuration.GetSection("FileStorage").GetSection("Extention").Value,
+                    FileName = fileDetails.FileName,
                     Inline = false
                 };
                 Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
                 Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                return File(file, _configuration.GetSection("MimeType").GetSection("Appli_Excel").Value);
+                return File(fileDetails.FileBytes, _configuration.GetSection("MimeType").GetSection("Appli_Excel").Value);
             }
             catch(Exception e)
             {

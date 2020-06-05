@@ -25,11 +25,6 @@ namespace CompanyCatalogue.Api
             services.AddDbContext<CatalogueContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("CatalogueDbContext"), opt => opt.MaxBatchSize(150)));
             services.AddBusinessService();
             services.AddRepositoryService();
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("company-cat-ui",
-            //    builder => builder.WithOrigins("http://localhost:3000"));
-            //});
 
             services.AddCors(options =>
             {

@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace CompanyCatalogue.Interfaces
 {
-    public interface ICatalogueUOW
+    public interface ICreateCompanyDetailsRepository
     {
-        Task Create(List<CompanyDetailModel> catalogues, string guid, string fileName);
+        void Create(List<CompanyDetailModel> catalogues, string guid);
     }
 }

@@ -4,40 +4,32 @@ using CompanyCatalogue.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CompanyCatalogue.Repository
 {
     public class CatalogueUOF : ICatalogueUOW
     {
         private CatalogueContext _catalogueContext;
-        public CatalogueUOF(CatalogueContext catalogueContext)
+        private ICreateCatalogueRepository _createCatalogueRepository;
+        private ICreateCompanyDetailsRepository _createCompanyDetailsRepository;
+        public CatalogueUOF(CatalogueContext catalogueContext,
+                            ICreateCatalogueRepository createCatalogueRepository,
+                            ICreateCompanyDetailsRepository createCompanyDetailsRepository)
         {
             _catalogueContext = catalogueContext;
+            _createCatalogueRepository = createCatalogueRepository;
+            _createCompanyDetailsRepository = createCompanyDetailsRepository;
         }
-        public void Create(List<CompanyDetailModel> catalogues, string guid, string fileName)
+        public async Task Create(List<CompanyDetailModel> catalogues, string guid, string fileName)
         {
             using (IDbContextTransaction transection = _catalogueContext.Database.BeginTransaction())
             {
                 try
                 {
-                    _catalogueContext.Catalogues.Add(new Catalogue { 
-                        CatalogueId = guid,
-                        FileName = fileName
-                    });
-                    foreach (CompanyDetailModel eachCompany in catalogues)
-                    {
-                        _catalogueContext.CompanyDetails.Add(new CompanyDetail { 
-                            CatalogueId = guid,
-                            CompanyName = eachCompany.CompanyName,
-                            Region = eachCompany.Region,
-                            Sector = eachCompany.Sector,
-                            NumberOfEmployees = eachCompany.NumberOfEmployees,
-                            SubSector = eachCompany.SubSector,
-                            TotalRevenues = eachCompany.TotalRevenues,
-                            WebSite = eachCompany.WebSite
-                        });
-                    }
-                    _catalogueContext.SaveChanges();
+                    _createCatalogueRepository.Create(guid, fileName);
+                    _createCompanyDetailsRepository.Create(catalogues, guid);
+                    await _catalogueContext.SaveChangesAsync();
                     transection.Commit();
                 }
                 catch (Exception e)

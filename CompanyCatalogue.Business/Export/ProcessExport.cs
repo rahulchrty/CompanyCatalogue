@@ -22,7 +22,7 @@ namespace CompanyCatalogue.Business
             _constructExcelFile = constructExcelFile;
             _deleteFile = deleteFile;
         }
-        public async Task<byte[]> Export(string catalogueId)
+        public async Task<ExportModel> Export(string catalogueId)
         {
             try
             {
@@ -31,7 +31,12 @@ namespace CompanyCatalogue.Business
                 _constructExcelFile.Create(path, catalogueDetails.CompanyDetails);
                 byte[] file = File.ReadAllBytes(path);
                 _deleteFile.Delete(path);
-                return file;
+                ExportModel fileDetails = new ExportModel
+                {
+                    FileBytes = file,
+                    FileName = catalogueDetails.FileName
+                };
+                return fileDetails;
             }
             catch(Exception ex)
             {
